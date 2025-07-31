@@ -2,6 +2,8 @@ package hu.cubix.koszegig.logosztics.logosztics.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity @Table(name = "address")
 public class Address {
     @Id
@@ -88,5 +90,41 @@ public class Address {
 
     public void setAddressLongtude(Long addressLongtude) {
         this.addressLongtude = addressLongtude;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Address address = (Address) obj;
+        return Objects.equals(addressId, address.addressId)
+                 && Objects.equals(addressISOFCode, address.addressISOFCode)
+                 && Objects.equals(addressZIP, address.addressZIP)
+                 && Objects.equals(addressCity, address.addressCity)
+                 && Objects.equals(addressStreet, address.addressStreet)
+                 && Objects.equals(addressLatitude, address.addressLatitude)
+                 && Objects.equals(addressLongtude, address.addressLongtude);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(addressId);
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "addressId=" + addressId +
+                ", addressISOFCode='" + addressISOFCode + '\'' +
+                ", addressZIP='" + addressZIP + '\'' +
+                ", addressCity='" + addressCity + '\'' +
+                ", addressStreet='" + addressStreet + '\'' +
+                ", addressLatitude=" + addressLatitude +
+                ", addressLongtude=" + addressLongtude +
+                '}';
     }
 }
