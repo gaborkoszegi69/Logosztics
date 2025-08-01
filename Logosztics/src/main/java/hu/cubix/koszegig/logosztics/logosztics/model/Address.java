@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
-@Entity @Table(name = "address")
+@Entity @Table(schema="com ",name = "address")
 public class Address {
     @Id
     @GeneratedValue
@@ -20,27 +20,27 @@ public class Address {
     private String addressStreet;
     @Column(name = "dr_latitude")
     private Long addressLatitude;
-    @Column(name = "dr_longtude")
-    private Long addressLongtude;
+    @Column(name = "dr_longitude")
+    private Long addressLongitude;
 
-    public Address(Long addressId, String addressISOFCode, String addressZIP, String addressCity, String addressStreet, Long addressLatitude, Long addressLongtude) {
+    public Address(Long addressId, String addressISOFCode, String addressZIP, String addressCity, String addressStreet, Long addressLatitude, Long addressLongitude) {
         this.addressId = addressId;
         this.addressISOFCode = addressISOFCode;
         this.addressZIP = addressZIP;
         this.addressCity = addressCity;
         this.addressStreet = addressStreet;
         this.addressLatitude = addressLatitude;
-        this.addressLongtude = addressLongtude;
+        this.addressLongitude = addressLongitude;
     }
 
     public Address() {
     }
 
-    public Long getAddressId() {
+    public Long getaddressId() {
         return addressId;
     }
 
-    public void setAddressId(Long addressId) {
+    public void setaddressId(Long addressId) {
         this.addressId = addressId;
     }
 
@@ -84,12 +84,12 @@ public class Address {
         this.addressLatitude = addressLatitude;
     }
 
-    public Long getAddressLongtude() {
-        return addressLongtude;
+    public Long getAddressLongitude() {
+        return addressLongitude;
     }
 
-    public void setAddressLongtude(Long addressLongtude) {
-        this.addressLongtude = addressLongtude;
+    public void setAddressLongitude(Long addressLongitude) {
+        this.addressLongitude = addressLongitude;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class Address {
                  && Objects.equals(addressCity, address.addressCity)
                  && Objects.equals(addressStreet, address.addressStreet)
                  && Objects.equals(addressLatitude, address.addressLatitude)
-                 && Objects.equals(addressLongtude, address.addressLongtude);
+                 && Objects.equals(addressLongitude, address.addressLongitude);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class Address {
                 ", addressCity='" + addressCity + '\'' +
                 ", addressStreet='" + addressStreet + '\'' +
                 ", addressLatitude=" + addressLatitude +
-                ", addressLongtude=" + addressLongtude +
+                ", addressLongitude=" + addressLongitude +
                 '}';
     }
 }

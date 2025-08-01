@@ -1,23 +1,39 @@
 package hu.cubix.koszegig.logosztics.logosztics.dto;
 
 
-public class AddressDto {
-    private Long Id;
-    private String ISOFCode;
-    private String ZIP;
-    private String city;
-    private String street;
-    private Long latitude;
-    private Long longtude;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-    public AddressDto(Long id, String ISOFCode, String ZIP, String city, String street, Long latitude, Long longtude) {
+public class AddressDto {
+
+    private Long Id;
+    @NotNull
+    @NotEmpty
+    private String ISOFCode;
+    @NotNull
+    @NotEmpty
+    private String ZIP;
+    @NotNull
+    @NotEmpty
+    private String city;
+    @NotNull
+    @NotEmpty
+    private String street;
+    @NotNull
+    @NotEmpty
+    private Long latitude;
+    @NotNull
+    @NotEmpty
+    private Long longitude;
+
+    public AddressDto(Long id, String ISOFCode, String ZIP, String city, String street, Long latitude, Long longitude) {
         Id = id;
         this.ISOFCode = ISOFCode;
         this.ZIP = ZIP;
         this.city = city;
         this.street = street;
         this.latitude = latitude;
-        this.longtude = longtude;
+        this.longitude = longitude;
     }
 
     public AddressDto() {
@@ -71,12 +87,12 @@ public class AddressDto {
         this.latitude = latitude;
     }
 
-    public Long getLongtude() {
-        return longtude;
+    public Long getLongitude() {
+        return longitude;
     }
 
-    public void setLongtude(Long longtude) {
-        this.longtude = longtude;
+    public void setLongitude(Long longitude) {
+        this.longitude = longitude;
     }
 
     @Override
@@ -88,7 +104,7 @@ public class AddressDto {
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
                 ", latitude=" + latitude +
-                ", longtude=" + longtude +
+                ", longitude=" + longitude +
                 '}';
     }
 }
