@@ -2,6 +2,7 @@ package hu.cubix.koszegig.logosztics.logosztics.service;
 
 import hu.cubix.koszegig.logosztics.logosztics.config.ApplicationConfigProperties;
 import hu.cubix.koszegig.logosztics.logosztics.config.ApplicationConfigProperties.JwtData;
+import hu.cubix.koszegig.logosztics.logosztics.model.LgUser;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,10 +23,10 @@ import java.util.stream.Collectors;
 public class JwtService {
 
     private static final String USERNAME = "username";
-    private static final String MANAGED_EMPLOYEES = "managedEmployees";
-    private static final String MANAGER = "manager";
     private static final String ID = "id";
     private static final String FULLNAME = "fullname";
+    private static final String FIRSTNAME = "firstname";
+    private static final String LASTNAME = "lastname";
     private static final String AUTH = "auth";
     private static Algorithm algorithm;// = Algorithm.HMAC256("mysecret");
     private static String ISSUER;
@@ -45,41 +46,26 @@ public class JwtService {
         }
 
     }
-   /* public String createJwt(UserDetails userDetails) {
-        Employee employee = ((HrUser)userDetails).getEmployee();
+    public String createJwt(UserDetails userDetails) {
+        LgUser lgUser = ((LogoszticsUser)userDetails).getLgUser();
 
         Builder jwtBuilder = JWT.create()
                 .withSubject(userDetails.getUsername())
                 .withArrayClaim(AUTH, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(String[]::new))
-                .withClaim(FULLNAME, employee.getName())
-                .withClaim(ID, employee.getEmployeeId());
-
-        Employee manager = employee.getManager();
-        if(manager != null) {
-            jwtBuilder.withClaim(MANAGER, createMapFromEmployee(manager));
-        }
-
-        Set<Employee> managedEmployees = employee.getManagedEmployees();
-        if(managedEmployees != null && ! managedEmployees.isEmpty()) {
-            jwtBuilder.withClaim(MANAGED_EMPLOYEES, managedEmployees.stream()
-                    .map(this::createMapFromEmployee)
-                    .toList());
-        }
+                .withClaim(USERNAME, lgUser.getUsername())
+                .withClaim(FIRSTNAME, lgUser.getUserFirstname())
+                .withClaim(LASTNAME, lgUser.getUserLastname())
+                .withClaim(FULLNAME, lgUser.getUserFullname())
+                .withClaim(ID, lgUser.getUserId());
 
 
         return jwtBuilder
-                .withExpiresAt(new Date(System.currentTimeMillis() + hrConfig.getJwtData().getDuration().toMillis()))
+                .withExpiresAt(new Date(System.currentTimeMillis() + applicationConfigProperties.getJwtData().getDuration().toMillis()))
                 .withIssuer(ISSUER)
                 .sign(algorithm);
     }
 
-    private Map<String, Object> createMapFromEmployee(Employee employee) {
 
-        return Map.of(
-                ID, employee.getEmployeeId(),
-                USERNAME, employee.getUsername()
-        );
-    }
 
     public UserDetails parseJwt(String jwtToken) {
 
@@ -87,40 +73,20 @@ public class JwtService {
                 .withIssuer(ISSUER)
                 .build()
                 .verify(jwtToken);
+        LgUser lgUser = new LgUser();
+        lgUser.setUserId(decodedJwt.getClaim(ID).asLong());
+        lgUser.setUsername(decodedJwt.getClaim(USERNAME).asString());
+        lgUser.setUserFirstname(decodedJwt.getClaim(FIRSTNAME).asString());
+        lgUser.setUserFirstname(decodedJwt.getClaim(LASTNAME).asString());
+        lgUser.setUsername(decodedJwt.getClaim(USERNAME).asString());
 
-        Employee employee = new Employee();
-        employee.setEmployeeId(decodedJwt.getClaim(ID).asLong());
-        employee.setUsername(decodedJwt.getSubject());
-        employee.setName(decodedJwt.getClaim(FULLNAME).asString());
-
-
-        Map<String, Object> managerData = decodedJwt.getClaim(MANAGER).asMap();
-        employee.setManager(parseEmployeeFromMap(managerData));
-
-        List<HashMap> managedEmployees = decodedJwt.getClaim(MANAGED_EMPLOYEES).asList(HashMap.class);
-        if(managedEmployees != null) {
-
-            employee.setManagedEmployees(
-                    managedEmployees.stream().map(this::parseEmployeeFromMap).collect(Collectors.toSet())
-            );
-        }
-
-
-        return new HrUser(
+        return new LogoszticsUser(
                 decodedJwt.getSubject(),
                 "dummy",
                 decodedJwt.getClaim(AUTH).asList(String.class).stream()
                         .map(SimpleGrantedAuthority::new).toList(),
-                employee);
+                lgUser);
     }
 
-    private Employee parseEmployeeFromMap(Map<String, Object> employeeData) {
-        if(employeeData == null || employeeData.isEmpty())
-            return null;
-        Employee employee = new Employee();
-        employee.setEmployeeId(((Integer)employeeData.get(ID)).longValue());
-        employee.setUsername(employeeData.get(USERNAME).toString());
-        return employee;
-    }*/
 
 }

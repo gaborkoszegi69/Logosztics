@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
-@Entity @Table(schema="com ",name = "address")
+@Entity @Table(schema="com",name = "address")
 public class Address {
     @Id
     @GeneratedValue
